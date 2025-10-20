@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vedika - Sri Sri University AI Guide</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <div class="chatbot-container">
+        
+        <header class="chat-header">
+            <img src="images/ssu-logo.png" alt="SSU Logo" class="logo">
+            <div class="header-title-group">
+                <h1>Vedika</h1>
+                <p class="tagline">Discover Sri Sri University effortlessly with our AI-powered guide.</p>
+            </div>
+            <div class="header-spacer"></div>
+        </header>
+
+        <div class="chat-messages" id="chat-messages">
+            <div class="welcome-container" id="welcome-container">
+                <div class="welcome-title">
+                    <i class="fa-solid fa-hands-praying"></i> Jai Gurudev
+                </div>
+                <p class="welcome-text">
+                    Welcome to Sri Sri University! I'm here to guide you through everything about the admissions process, academic programs, and student life. Let's explore SSU together! 🎓
+                </p>
+    
+                <div class="suggestion-chips">
+                    <button class="chip chip-primary" data-message="Say Hi">
+                        <i class="fa-solid fa-hand-sparkles"></i> Say Hi
+                    </button>
+                    <button class="chip chip-primary" data-message="Tell me a joke">
+                        <i class="fa-solid fa-comments"></i> Casual Chat
+                    </button>
+                    <button class="chip chip-primary" data-message="What is Sri Sri University?">
+                        <i class="fa-solid fa-graduation-cap"></i> Learn about SSU
+                    </button>
+                </div>
+                
+                <div class="suggestion-chips">
+                    <button class="chip chip-secondary" data-message="What are the admission requirements?">
+                        <i class="fa-solid fa-file-contract"></i> Admission requirements
+                    </button>
+                    <button class="chip chip-secondary" data-message="Tell me about hostel facilities">
+                        <i class="fa-solid fa-hotel"></i> Hostel facilities
+                    </button>
+                    <button class="chip chip-secondary" data-message="What courses are offered?">
+                        <i class="fa-solid fa-book-open"></i> Courses offered
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="chat-input-area" id="chat-input-area">
+            <button id="mic-btn" aria-label="Use microphone" class="icon-button">
+                <i class="fa-solid fa-microphone"></i>
+            </button>
+            <!-- THIS ID IS NOW CORRECT -->
+            <input type="text" id="user-input" placeholder="Ask Vedika about SSU...">
+            <button id="send-btn" aria-label="Send message" class="icon-button">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </footer>
+
+    </div>
+
+    <script src="app.js"></script>
+
+</body>
+</html>

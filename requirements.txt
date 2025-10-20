@@ -1,0 +1,17 @@
+# --- Core Server ---
+fastapi
+uvicorn[standard]
+python-dotenv
+pydantic
+
+# --- AI & LangChain ---
+langchain
+langchain-google-genai
+langchain_community
+
+# --- Vector Store ---
+faiss-cpu
+
+# --- Data Scraping ---
+beautifulsoup4
+requests

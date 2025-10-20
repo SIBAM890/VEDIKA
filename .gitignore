@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# Data & Vector Store (These are generated, not part of source code)
+/data/
+/vector_store/
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
