@@ -1,49 +1,51 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- DOM Element References ---
     const chatMessages = document.getElementById('chat-messages');
-    const userInput = document.getElementById('user-input');
+    const userInput = document.getElementById('user-input'); 
     const sendBtn = document.getElementById('send-btn');
     const micBtn = document.getElementById('mic-btn');
     const welcomeContainer = document.getElementById('welcome-container');
 
     // API URL for our backend
     const API_URL = "http://127.0.0.1:8000/api/chat";
-    const welcomeMessage = "Jai Gurudev! Welcome to Sri Sri University! I'm here to guide you through everything about the admissions process, academic programs, and student life. Let's explore SSU together! 🎓";
+    const welcomeMessage = "Jai Gurudev! Welcome to Sri Sri University! I'm here to guide you through everything about the admissions process, academic programs, and student life. Let's explore SSU together! ";
 
     // --- State Management ---
     let wasInputFromSpeech = false;
     let conversationStarted = false;
 
     // --- Core Functions ---
+
+    // Function to add a message, now with Markdown support
     function addMessage(text, sender) {
         const messageElement = document.createElement('div');
         messageElement.classList.add('message', `${sender}-message`);
 
-        // Safely check if the 'marked' library is available for bot messages
+        // Safely check if the 'marked' library is available
         if (sender === 'bot' && typeof marked !== 'undefined') {
-             // Use marked.parse() to convert Markdown to HTML
-             const cleanHtml = typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(marked.parse(text)) : marked.parse(text);
-             messageElement.innerHTML = cleanHtml;
+            // If it's a bot message and marked is loaded, parse the Markdown
+            messageElement.innerHTML = marked.parse(text);
         } else {
-            // For user messages or if marked.js fails to load, use plain text
+            // Otherwise, just use plain text
             messageElement.textContent = text;
         }
         
         chatMessages.appendChild(messageElement);
-        // Scroll smoothly to the bottom of the chat window
         chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
     }
 
-    function showTypingIndicator() {
+    // Function to show a typing indicator
+     function showTypingIndicator() {
         const typingIndicator = document.createElement('div');
-        typingIndicator.id = 'typing-indicator-dynamic';
+        typingIndicator.id = 'typing-indicator-dynamic'; // Give it an ID
         typingIndicator.classList.add('message', 'bot-message', 'typing-indicator');
         typingIndicator.innerHTML = '<span></span><span></span><span></span>';
         chatMessages.appendChild(typingIndicator);
         chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
-        return typingIndicator.id;
+        return typingIndicator.id; // Return the ID
     }
 
+    // Function to remove the typing indicator
     function removeTypingIndicator(indicatorId) {
         const indicator = document.getElementById(indicatorId);
         if (indicator) {
@@ -51,27 +53,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Function to start the chat, hiding the welcome screen
     function startConversation() {
         if (!conversationStarted) {
             welcomeContainer.style.display = 'none';
-            // Align subsequent messages to the top
+            // Align messages to the top once conversation starts
             chatMessages.style.justifyContent = 'flex-start';
             conversationStarted = true;
         }
     }
 
+    // Main function to handle form submission
     async function handleUserMessage(message) {
         if (!message || message.trim() === '') return;
 
         startConversation();
         addMessage(message, 'user');
-        userInput.value = '';
+        userInput.value = ''; // Clear input AFTER adding message
 
-        const typingIndicatorId = showTypingIndicator();
-        await getBotResponse(message, typingIndicatorId);
+        const typingIndicatorId = showTypingIndicator(); // Get the ID
+        await getBotResponse(message, typingIndicatorId); // Pass the ID
     }
     
-    async function getBotResponse(userText, typingIndicatorId) {
+    // Function to get response from the backend
+    async function getBotResponse(userText, typingIndicatorId) { // Receive ID
         try {
             const response = await fetch(API_URL, {
                 method: 'POST',
@@ -79,23 +84,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ message: userText }),
             });
             
-            removeTypingIndicator(typingIndicatorId);
+            removeTypingIndicator(typingIndicatorId); // Remove using ID
 
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             
             const data = await response.json();
-            addMessage(data.reply, 'bot');
+            addMessage(data.reply, 'bot'); // Render message (potentially with Markdown)
 
             if (wasInputFromSpeech) {
-                // Clean the text of Markdown for clearer speech
-                const cleanText = data.reply.replace(/[*_`#~]/g, '');
+                 // For speech, remove potential Markdown formatting for clearer pronunciation
+                const cleanText = data.reply.replace(/[*_`#~]/g, ''); // Simple regex
                 speakText(cleanText);
                 wasInputFromSpeech = false; 
             }
 
         } catch (error) {
             console.error('Error fetching bot response:', error);
-            removeTypingIndicator(typingIndicatorId);
+            removeTypingIndicator(typingIndicatorId); // Remove indicator on error
             const errorMsg = 'Sorry, something went wrong connecting. Please try again.';
             addMessage(errorMsg, 'bot');
             if (wasInputFromSpeech) {
@@ -105,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+
     // --- Text-to-Speech (TTS) ---
     function speakText(text) {
         if ('speechSynthesis' in window) {
@@ -113,7 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const setVoice = () => {
                 const voices = window.speechSynthesis.getVoices();
                  if (voices.length === 0) {
-                     setTimeout(setVoice, 100); // Retry if voices aren't loaded
+                     // Wait a fraction of a second if voices aren't loaded yet
+                     setTimeout(setVoice, 100);
                      return;
                  }
                 const desiredVoice = voices.find(voice => voice.name === "Google हिन्दी");
@@ -122,9 +129,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.speechSynthesis.speak(utterance);
             };
 
-            const voices = speechSynthesis.getVoices();
-            if (voices.length > 0) setVoice();
-            else speechSynthesis.onvoiceschanged = setVoice;
+            // This is the most reliable way to load voices
+            if (speechSynthesis.getVoices().length > 0) {
+                 setVoice();
+            } else {
+                 speechSynthesis.onvoiceschanged = setVoice;
+            }
         }
     }
 
@@ -189,15 +199,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initial Load ---
 
-    // Define the function to trigger the welcome speech
+    // Define the function that will trigger the welcome speech.
     function triggerWelcomeSpeech() {
         speakText(welcomeMessage);
     }
-
-    // Add a one-time event listener to speak on the user's first interaction
-    // This is the only welcome speech trigger, ensuring it runs only once.
+    // Add a one-time event listener to speak on the user's first interaction with the page.
     window.addEventListener('click', triggerWelcomeSpeech, { once: true });
     window.addEventListener('touchstart', triggerWelcomeSpeech, { once: true });
-
 });
-
