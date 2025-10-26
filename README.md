@@ -52,49 +52,6 @@ Speech: Web Speech API (SpeechRecognition, SpeechSynthesis)
 
 Icons: Font Awesome
 
-📁 Project Structure
-
-VEDIKA/
-│
-├── .env                  # API keys and root URL configuration
-├── .gitignore            # Specifies intentionally untracked files
-├── requirements.txt      # Python dependencies
-├── README.md             # This file
-│
-├── backend/              # FastAPI application, RAG logic, Scraper
-│   ├── __init__.py
-│   ├── main.py           # FastAPI app entry point
-│   ├── config.py         # Loads .env, defines constants & paths
-│   ├── scraper.py        # Advanced web crawler class (SSUWebCrawler)
-│   ├── vectorstore.py    # Manages FAISS vector store & OpenAI embeddings
-│   ├── rag_engine.py     # Core LangChain RAG pipeline and routing logic
-│   ├── routes/
-│   │   └── chat.py       # API endpoint (/api/chat)
-│   └── utils/
-│       ├── text_cleaner.py # Text chunking utilities (if used by ingest)
-│       └── logger.py       # Shared logging configuration
-│
-├── data/                 # Stores raw data downloaded by the scraper
-│   └── raw/
-│       ├── pdfs/         # Downloaded PDF files
-│       ├── images/       # Downloaded image files
-│       └── json/         # Downloaded JSON files
-│
-├── vector_store/
-│   └── faiss_index/      # Saved FAISS index files (created by ingest.py)
-│       ├── index.faiss
-│       └── index.pkl
-│
-├── frontend/             # Web User Interface
-│   ├── images/
-│   │   └── ssu-logo.png  # University logo
-│   ├── index.html        # Main chat page structure
-│   ├── style.css         # Styling for the chat interface
-│   └── app.js            # Frontend logic, API calls, speech handling
-│
-└── ingest.py             # Script to run the scraper and build the vector store
-
-
 🚀 Getting Started
 
 Follow these steps to set up and run the Vedika chatbot locally.
