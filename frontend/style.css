@@ -1,24 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
-    --primary-color: #721C24; /* Persian Plum */
-    --primary-color-dark: #611820;
-    --background-color: #FFFFFF;
-    --chat-area-bg: #fdfafa; /* Very light, warm background */
+    /* CHANGED: Palette derived from logo and background */
+    --primary-color: #721C24; /* The exact maroon from the SSU logo */
+    --primary-color-dark: #611820; /* A darker shade for hovers */
+    --accent-color: #B9975B; /* The warm gold from the trees */
+    
+    /* CHANGED: Warmer, cream-based backgrounds */
+    --background-color: #FBF8F3; /* Warm cream from the background image */
+    --chat-area-bg: #FCFCFA; /* A very light, warm white for the message area */
+    --border-color: #EAE6DD; /* A soft, warm border color */
+
     --text-color: #333333;
     --text-color-light: #555;
     --header-text-color: #FFFFFF;
     --font-family: 'Inter', 'Arial', sans-serif;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
+/* === BACKGROUND STYLING === */
 body {
     font-family: var(--font-family);
-    background-color: #e0e0e0; /* Grey background to see the chatbot container */
+    margin: 0;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    background-image: url("images/bg-tree.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    position: relative;
 }
 
 /* --- MAIN CONTAINER --- */
@@ -26,24 +38,26 @@ body {
     width: 100%;
     max-width: 850px;
     height: 95vh;
-    max-height: 750px; 
+    max-height: 750px;
     border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    background-color: var(--background-color);
+    /* CHANGED: Softer, brand-tinted shadow */
+    box-shadow: 0 8px 32px rgba(97, 24, 32, 0.15); 
+    background-color: var(--background-color); /* CHANGED: Uses warm cream */
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color); /* CHANGED: Uses warm border */
 }
 
-/* --- HEADER (MODIFIED FOR CENTERING) --- */
+
+/* --- HEADER --- */
 .chat-header {
-    background-color: var(--primary-color);
+    background-color: var(--primary-color); /* USES: Logo maroon */
     color: var(--header-text-color);
     padding: 15px 25px;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* This creates space around the center item */
+    justify-content: space-between;
     position: relative;
     flex-shrink: 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -52,7 +66,7 @@ body {
 .chat-header .logo, .chat-header .header-spacer {
     height: 45px;
     width: 45px;
-    flex-shrink: 0; /* Prevents shrinking */
+    flex-shrink: 0;
 }
 
 .chat-header .logo {
@@ -63,8 +77,8 @@ body {
 }
 
 .chat-header .header-title-group {
-    text-align: center; /* Ensures text inside is centered */
-    flex-grow: 1; /* Allows it to take up the middle space */
+    text-align: center;
+    flex-grow: 1;
 }
 
 .chat-header h1 {
@@ -80,24 +94,22 @@ body {
     margin-top: 2px;
     margin-bottom: 0;
 }
-/* --- END HEADER FIX --- */
-
 
 /* --- MESSAGE AREA --- */
 .chat-messages {
     flex-grow: 1;
     overflow-y: auto;
     padding: 20px 30px;
-    background-color: var(--chat-area-bg);
+    background-color: var(--chat-area-bg); /* CHANGED: Uses light warm white */
     display: flex;
     flex-direction: column;
 }
 
-/* --- WELCOME BLOCK & CHIPS --- */
+/* --- WELCOME BLOCK --- */
 .welcome-container {
     text-align: center;
     padding: 20px 0;
-    margin: auto 0; /* Vertically centers the welcome block */
+    margin: auto 0;
 }
 
 .welcome-title {
@@ -119,6 +131,7 @@ body {
     margin: 0 auto 25px auto;
 }
 
+/* --- CHIPS --- */
 .suggestion-chips {
     display: flex;
     flex-wrap: wrap;
@@ -145,7 +158,7 @@ body {
 }
 
 .chip-primary {
-    background-color: var(--primary-color);
+    background-color: var(--primary-color); /* USES: Logo maroon */
     color: white;
     border-color: var(--primary-color);
 }
@@ -157,19 +170,22 @@ body {
 }
 
 .chip-secondary {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    border: 1px solid #ccc;
+    /* CHANGED: Uses accent color for secondary actions */
+    background-color: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
 }
 
 .chip-secondary:hover {
-    background-color: #f8f8f8;
-    border-color: #aaa;
+    /* CHANGED: Uses accent color for hover */
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--header-text-color);
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* --- DYNAMIC USER & BOT MESSAGES --- */
+/* --- CHAT MESSAGES --- */
 .message {
     max-width: 75%;
     padding: 12px 18px;
@@ -188,12 +204,13 @@ body {
 }
 
 .user-message {
-    background-color: var(--primary-color);
+    background-color: var(--primary-color); /* USES: Logo maroon */
     color: var(--header-text-color);
     align-self: flex-end;
     border-bottom-right-radius: 5px;
 }
 
+/* --- TYPING ANIMATION --- */
 .typing-indicator {
     align-self: flex-start;
     padding: 12px 18px;
@@ -203,20 +220,19 @@ body {
 .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
 @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
 
-
 /* --- INPUT AREA --- */
 .chat-input-area {
     display: flex;
     align-items: center;
     padding: 15px 20px;
-    border-top: 1px solid #e0e0e0;
-    background-color: var(--background-color);
+    border-top: 1px solid var(--border-color); /* CHANGED: Uses warm border */
+    background-color: var(--background-color); /* CHANGED: Uses warm cream */
     flex-shrink: 0;
     box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
 }
 
 .chat-input-area .icon-button {
-    background-color: var(--primary-color);
+    background-color: var(--primary-color); /* USES: Logo maroon */
     color: white;
     border: none;
     cursor: pointer;
@@ -237,10 +253,10 @@ body {
 
 .chat-input-area #user-input {
     flex-grow: 1;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color); /* CHANGED: Uses warm border */
     padding: 12px 20px;
     border-radius: 25px;
-    background-color: #f0f2f5;
+    background-color: #FFFFFF; /* CHANGED: Kept white for clarity */
     font-family: var(--font-family);
     font-size: 0.95rem;
     margin: 0 15px;
@@ -248,7 +264,8 @@ body {
 }
 
 .chat-input-area #user-input:focus {
+    /* CHANGED: Uses accent color for focus */
     outline: none;
-    box-shadow: 0 0 0 2px var(--primary-color);
-    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--accent-color);
+    border-color: var(--accent-color);
 }

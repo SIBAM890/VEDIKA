@@ -6,12 +6,16 @@ pydantic
 
 # --- AI & LangChain ---
 langchain
-langchain-google-genai
+langchain-openai
+openai
 langchain_community
 
 # --- Vector Store ---
 faiss-cpu
 
-# --- Data Scraping ---
+# --- Web Scraping & Parsing ---
 beautifulsoup4
 requests
+lxml         # for better HTML parsing
+PyPDF2       # for reading PDF text
+urllib3      # for retry/backoff logic
