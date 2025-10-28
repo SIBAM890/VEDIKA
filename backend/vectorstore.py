@@ -89,8 +89,14 @@ class VectorStore:
         except Exception as e:
             logger.error(f"❌ Failed to save vector store: {e}")
 
-    def load(self):
-        """Loads FAISS store from disk."""
+    def load_store(self):
+        """
+        Loads and returns the raw FAISS vector store instance.
+        Use this for dynamic k retrieval in queries.
+        
+        Returns:
+            FAISS vectorstore instance or None if loading fails
+        """
         try:
             if not os.path.exists(self.path):
                 logger.error(f"Vector store not found at {self.path}. Please run ingest.py first.")
@@ -102,8 +108,101 @@ class VectorStore:
                 embeddings=self.embeddings_model,
                 allow_dangerous_deserialization=True,
             )
-            logger.info("✅ Vector store loaded successfully.")
-            return self.store.as_retriever(search_kwargs={"k": 3})
+            logger.info("✅ Vector store loaded successfully (raw instance for dynamic retrieval).")
+            return self.store
+
         except Exception as e:
             logger.error(f"❌ Error loading vector store: {e}")
             return None
+
+    def load(self, k: int = 5):
+        """
+        Loads FAISS store and returns as retriever with fixed k.
+        
+        Args:
+            k: Number of documents to retrieve (default: 5)
+            
+        Returns:
+            Retriever instance or None if loading fails
+            
+        Note: For dynamic k based on query type, use load_store() instead
+        """
+        try:
+            if not os.path.exists(self.path):
+                logger.error(f"Vector store not found at {self.path}. Please run ingest.py first.")
+                return None
+
+            logger.info(f"Loading vector store from: {self.path}")
+            self.store = FAISS.load_local(
+                folder_path=self.path,
+                embeddings=self.embeddings_model,
+                allow_dangerous_deserialization=True,
+            )
+            logger.info(f"✅ Vector store loaded successfully. Retriever configured with k={k}")
+            return self.store.as_retriever(search_kwargs={"k": k})
+
+        except Exception as e:
+            logger.error(f"❌ Error loading vector store: {e}")
+            return None
+    
+    def similarity_search(self, query: str, k: int = 5):
+        """
+        Convenience method for direct similarity search.
+        
+        Args:
+            query: Search query string
+            k: Number of results to return
+            
+        Returns:
+            List of Document objects
+        """
+        if not self.store:
+            logger.warning("Vector store not loaded. Loading now...")
+            self.store = self.load_store()
+            
+        if not self.store:
+            logger.error("Failed to load vector store for search.")
+            return []
+            
+        try:
+            results = self.store.similarity_search(query, k=k)
+            logger.info(f"✅ Retrieved {len(results)} documents for query (k={k})")
+            return results
+        except Exception as e:
+            logger.error(f"❌ Similarity search failed: {e}")
+            return []
+    
+    def mmr_search(self, query: str, k: int = 5, fetch_k: int = 20, lambda_mult: float = 0.5):
+        """
+        Maximum Marginal Relevance search for diverse results.
+        Useful for getting varied perspectives on a topic.
+        
+        Args:
+            query: Search query string
+            k: Number of results to return
+            fetch_k: Number of documents to fetch before MMR reranking
+            lambda_mult: Diversity parameter (0=max diversity, 1=max relevance)
+            
+        Returns:
+            List of Document objects
+        """
+        if not self.store:
+            logger.warning("Vector store not loaded. Loading now...")
+            self.store = self.load_store()
+            
+        if not self.store:
+            logger.error("Failed to load vector store for MMR search.")
+            return []
+            
+        try:
+            results = self.store.max_marginal_relevance_search(
+                query, 
+                k=k, 
+                fetch_k=fetch_k,
+                lambda_mult=lambda_mult
+            )
+            logger.info(f"✅ MMR search retrieved {len(results)} diverse documents (k={k}, fetch_k={fetch_k})")
+            return results
+        except Exception as e:
+            logger.error(f"❌ MMR search failed: {e}")
+            return []
