@@ -1,17 +1,59 @@
-# Python
+# ===========================
+# PYTHON CACHE / BUILD FILES
+# ===========================
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+build/
+dist/
+
+# ===========================
+# VIRTUAL ENVIRONMENTS
+# ===========================
 .venv/
 venv/
 env/
+ENV/
+.venv*/
 
-# Data & Vector Store (These are generated, not part of source code)
+# ===========================
+# GENERATED DATA & CACHE
+# ===========================
 /data/
-/vector_store/
+vector_store/
+fast_cache/
+response_cache/
+uploads/
+logs/
 
-# Environment
+# ===========================
+# ENVIRONMENT VARIABLES
+# ===========================
 .env
+*.env
+*.env.*
 
-# IDE
+# ===========================
+# SYSTEM / OS FILES
+# ===========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===========================
+# IDE / EDITOR CONFIG
+# ===========================
 .vscode/
 .idea/
+*.sublime-project
+*.sublime-workspace
+
+# ===========================
+# TESTS / TEMP FILES
+# ===========================
+test_*.py
+*.ipynb_checkpoints/
+__tests__/
+tmp/
