@@ -26,6 +26,7 @@ COMMON_QUESTIONS = [
     "What is Global MBA?",
     "Difference between MBA and Global MBA",
     "BBA course details",
+    "DEAN OF Manegement Studies",
     
     # Programs - Computer Applications
     "What is BCA course?",
@@ -43,8 +44,8 @@ COMMON_QUESTIONS = [
     "What is BAMS course?",
     "Tell me about Bachelor of Physiotherapy",
     "Nursing programs available",
-    
-    # Admissions
+    "Dean Of BAMS",
+            # Admissions
     "How to apply for admission?",
     "What is the admission process?",
     "Admission eligibility criteria",
@@ -72,6 +73,13 @@ COMMON_QUESTIONS = [
     "Average placement package",
     "Career opportunities after B.Tech CSE",
     "Placement support provided",
+    "Who is the current dean of Sri Sri University?",
+    "Who is the dean of School of Engineering?",
+    "Tell me about B.Tech CSE program",
+    "What programs does Sri Sri University offer?",
+    "List all courses available",
+    "What are the admission requirements?",
+    "Who is All Time ?",
     
     # General
     "List all undergraduate programs",

@@ -1,8 +1,7 @@
-# backend/routes/chat.py
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from backend.ultra_optimized_rag import ultra_fast_rag
+from backend.ultra_optimized_rag import get_balanced_chain
 from backend.utils.logger import get_logger
 import json
 import traceback
@@ -10,6 +9,9 @@ import asyncio
 
 router = APIRouter()
 logger = get_logger("chat_api")
+
+rag_chain = get_balanced_chain()
+
 
 # --- Pydantic Models ---
 class ChatRequest(BaseModel):
@@ -30,7 +32,8 @@ async def handle_chat(request: ChatRequest):
 
     try:
         # Use ultra-fast RAG
-        response, metadata = await ultra_fast_rag(user_message)
+        response, metadata = await rag_chain(user_message)
+
         
         logger.info(f"✅ Response in {metadata.get('total_time', 0):.2f}s | Cached: {metadata.get('cache_hit', False)}")
         
@@ -53,7 +56,8 @@ async def handle_chat_stream(request: ChatRequest):
     async def generate():
         try:
             # Get response
-            response, metadata = await ultra_fast_rag(user_message)
+            response, metadata = await rag_chain(user_message)
+
             
             # If cached, send instantly
             if metadata.get('cache_hit'):
